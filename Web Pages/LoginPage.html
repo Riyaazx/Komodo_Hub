@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/Web Pages/LoginRegister.css">
+    <link rel="stylesheet" href="/Web Pages/Popup.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="#" id="home">
+            <img src="images/komodoLogo.png" alt="Logo" class="logo">
+        </a>
+    </div>
+    <div class="form-container login-box">
+        <h2 class="form-title">Login to Komodo Hub</h2> 
+        <form id="loginForm">
+            <input type="text" name="username" placeholder="Username *" oninput="this.value = this.value.replace(/\s/g, '')" required>
+            <div id="usernameError" class="error-message-username"></div>
+
+            <div class="password-container">
+                <input type="password" id="password" name="password" placeholder="Password *" oninput="this.value = this.value.replace(/\s/g, '')" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('password', this)">
+                    <img src="/Web Pages/Images/Hide_pass.png" alt="Hide Password" class="eye">
+                </button>
+            </div>
+            <div id="passwordError" class="error-message"></div>
+
+            <div class="dropdown">
+                <select id="dropdown" name="user_type" required>
+                    <option value="" disabled selected hidden>Login as </option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="member">Member</option>
+                </select>
+            </div>
+        
+            <img src="Images/giphy.gif" alt="Loading animation" class="gif">
+
+            <button id="submit" type="submit" class="submit-button">Log In</button>
+        </form>
+        <p class="redirect">
+            Don't have an account? <a href="#" id="registerLink">Register</a>
+        </p>
+    </div>
+    
+    <script>
+        document.querySelector('input[name="username"]').addEventListener('input', function () {
+            let username = document.querySelector('input[name="username"]').value;
+            let dropdown = document.getElementById('dropdown');
+            let dropdownContainer = dropdown.parentElement; // Get the dropdown wrapper div
+
+            // Define the specific username that triggers the hide behavior
+            let specialUsername = "KhairunnisaUjungRayaPrimary"; // Change this to the username you want
+            let specialUsername2 = "AdminUser#404";
+
+            if (username === specialUsername || username === specialUsername2) {
+                dropdownContainer.classList.add('hidden'); // Hide the dropdown
+                dropdown.removeAttribute('required'); // Remove required attribute
+                dropdown.value = ""; // Clear its value
+            } else {
+                dropdownContainer.classList.remove('hidden');
+                dropdown.setAttribute('required', 'true'); // Ensure required is added back
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let username = document.querySelector('input[placeholder="Username *"]').value;
+            let password = document.querySelector('input[placeholder="Password *"]').value;
+            let userType = document.getElementById('dropdown').value;
+
+            // Set userType to "admin" if username is "adminUser"
+            if (username === "KhairunnisaUjungRayaPrimary") {
+                userType = "principal";
+            }
+            if (username === "AdminUser#404") {
+                userType = "admin";
+            }
+
+            let formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+            formData.append('user_type', userType);
+
+            try {
+                let response = await fetch('/login', {  //Update the endpoint to your login route
+                    method: 'POST',
+                    body: formData
+                });
+
+                let result = await response.json();
+
+                if (response.ok) {
+                    
+                    localStorage.setItem("username", username);
+                    localStorage.setItem("userType", userType);
+
+                    // Show popup message
+                    showLoginSuccessPopup(username);
+                
+                    // Redirect to user dashboard after a short delay
+                    setTimeout(() => {
+                        window.location.replace('/Web Pages/HomePage.html');
+                    }, 2000);
+                } else {
+                    let passwordError = document.getElementById("passwordError");
+                    passwordError.textContent = "";
+
+                    if (result.error.toLowerCase().includes("invalid password")) {
+                        passwordError.textContent = "❗Invalid password.";
+                        setTimeout(() => {
+                            passwordError.textContent = "";
+                        }, 2500);
+                    } else if (result.error.toLowerCase().includes("user does not exist")) {
+                        let usernameError = document.getElementById("usernameError");
+                        usernameError.textContent = "❗User does not exist";
+                        setTimeout(() => {
+                            usernameError.textContent = "";
+                        }, 3000);
+                    } else if (result.error.toLowerCase().includes("username does not exist")) {
+                        let usernameError = document.getElementById("usernameError");
+                        usernameError.textContent = "❗Username does not exist";
+                        setTimeout(() => {
+                            usernameError.textContent = "";
+                        }, 3000);
+                    } else {
+                        showPopup("An error occurred while logging in.", "error", 1800);
+                    }                         
+                }
+            } catch (error) {
+                showPopup("An error occurred while logging in.", "error", 1800);
+            }
+        });
+
+        // login success popup
+        function showLoginSuccessPopup(username) {
+            // Retrieve the username from local storage or use the passed parameter
+            let storedUsername = localStorage.getItem("username") || username;
+            
+            // Fetch user details from the backend to get the full name
+            fetch('/get_user_details', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ username: storedUsername })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Check if full name is returned; if not, display an error popup
+                if (!data.name) {
+                    showPopup("Error fetching user full name", "error", 3000);
+                    return;
+                }
+            let registeredName = data.name;
+            let successPopup = document.createElement("div");
+            successPopup.className = "login success-popup"; 
+            successPopup.innerHTML = `
+                <div class="popup-content">
+                    <h2> ✔ LOGIN SUCCESSFUL!</h2>
+                    <img src="Images/bird_waving.gif" alt="Bird Waving" class="popup-bird" />
+                    <p>WELCOME <strong class="shiny-name">${registeredName}</strong></p>
+                    <hr class="popup-divider">
+                    <p>Enjoy your journey with <strong>KomodoHub!</strong> </p>
+                </div>
+            `;
+            document.body.appendChild(successPopup);
+            
+            setTimeout(() => {
+                successPopup.style.opacity = "1";
+            }, 10);
+            
+            setTimeout(() => {
+                successPopup.style.opacity = "0";
+                setTimeout(() => successPopup.remove(), 300);
+            }, 290000);
+            })
+            .catch(error => {
+                console.error("Error fetching user details:", error);
+                showPopup("Error fetching user details", "error", 3000);
+            });
+        }
+
+        // Function to toggle password visibility
+        function togglePassword(fieldId, button) {
+            let passwordField = document.getElementById(fieldId);
+            let img = button.querySelector('img');
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                img.src = "/Web Pages/Images/Show_pass.png"; 
+                img.alt = "Show Password";
+            } else {
+                passwordField.type = "password";
+                img.src = "/Web Pages/Images/Hide_pass.png"; 
+                img.alt = "Hide Password";
+            }
+        }
+
+        function showPopup(message, type, time, errorField = null) {
+            let popup = document.getElementById("popupMessage");
+            
+            if (!popup) {
+                popup = document.createElement("div");
+                popup.id = "popupMessage";
+                popup.classList.add("popup");
+                document.querySelector('.form-container').appendChild(popup); // Attach below form
+            }
+
+            popup.textContent = message;
+            popup.className = `popup ${type}`;
+            popup.style.display = "block";
+
+            if (errorField) {
+                errorField.classList.add("input-error");
+                errorField.focus();
+            }
+
+            setTimeout(() => {
+                popup.style.opacity = "1";
+            }, 10);
+
+            setTimeout(() => {
+                popup.style.opacity = "0";
+                setTimeout(() => popup.style.display = "none", 300);
+                if (errorField) {
+                    errorField.classList.remove("input-error");
+                }
+            }, time);
+        }
+
+        document.getElementById("registerLink").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default navigation
+            window.location.replace("/Web Pages/RegisterPage.html"); // Redirect without allowing back navigation
+        });
+
+        document.getElementById("home").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default navigation
+            window.location.replace("/Web Pages/HomePage.html"); // Redirect without allowing back navigation
+        });
+    </script> 
+</body>
+</html>

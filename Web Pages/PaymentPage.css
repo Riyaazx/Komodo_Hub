@@ -1,0 +1,293 @@
+body {
+    background: url('Images/background.jpg') no-repeat center center/cover;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    gap: 30px;
+    background: linear-gradient(145deg, #7ba962, #9cbc89);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(100px);
+    padding-right: 30px;
+    align-items: flex-start;
+}
+
+.payment-box, .summary-box {
+    background: linear-gradient(145deg, #acd197, #9cbc89);
+    padding: 35px;
+    border-radius: 10px;
+    width: 350px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.payment-summary, .ticket-background, .ticket-background2 {
+    transition: height 0.2s ease-in-out;
+}
+
+
+.payment-box h1, .summary-box h3 {
+    color: #1a3f1e;
+}
+
+.payment-box h1 {
+    margin-top: 0;
+    font-family: 'Monotype Corsiva', cursive;
+    font-size: 35px;
+}
+
+.payment-box p {
+    font-size: 14px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-family: 'futura';
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+input {
+    padding: 8px;
+    border: 0px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 5px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.card-details {
+    display: flex;
+    gap: 13px;
+}
+
+.card-details div {
+    width: 47.3%;
+}
+
+.card-details div input {
+    width: 94.6%;
+}
+
+.card-number-input {
+    width: 100.2%;
+    box-sizing: border-box;
+}
+
+button {
+    background: #2a8d2a;
+    color: white;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #015401;
+    transition: background-color 0.3s ease;
+}
+
+.popup {
+    position: absolute;
+    top: 100%;
+    left: 5%;
+    width: 25%; 
+    padding: 10px; 
+    font-size: 14px; 
+    color: white;
+    border-radius: 2px; 
+}
+
+.popup.success {
+    background-color: green;
+}
+
+.popup.error {
+    background-color: rgb(131, 7, 7);
+}
+
+
+.ticket-background {
+    position: absolute;
+    right: 2.5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    height: 370px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.ticket-background2 {
+    position: absolute;
+    right: 4%;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 130px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.ticket-background::before {
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 20px;
+    bottom: 120px;
+    border-bottom: 2px dashed rgba(0, 0, 0, 0.5);
+}
+
+.total-amount-box {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.payment-summary {
+    position: relative;
+    z-index: 1;
+    padding: -10px;
+    border-radius: 10px;
+    width: 300px;
+    font-size: 14px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.payment-summary h3 {
+    margin-top: 4;
+    font-family: 'Monotype Corsiva', cursive;
+    font-size: 35px;
+    color: #1a3f1e;
+}
+
+.payment-details strong {
+    margin-right: 10px;
+    width: 150px;
+}
+
+.payment-summary p {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 23px;
+    margin-bottom: 1px;
+    margin-top: 19px;
+}
+
+.payment-summary p strong {
+    width: 160px;
+    color: #000000;
+}
+
+.payment-summary p span {
+    text-align: left;
+    color: #000000;
+    flex-grow: 1;
+}
+
+input.invalid {
+    border-color: rgb(204, 43, 43) !important;
+    border-width: 2px !important;
+    border-style: solid !important;
+}
+
+
+.error-message {
+    color: rgb(165, 17, 17);
+    font-size: 12px;
+    margin-top: 0px;
+    margin-left: 0px; 
+    width: 100%;
+    white-space: nowrap;
+}
+
+.payment-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background:linear-gradient(145deg, #7ba962, #9cbc89);;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    width: 300px;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    font-family: 'Times New Roman', Times, serif; 
+    border: 3px solid transparent;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    animation: shiny-border 3s infinite linear;
+}
+
+@keyframes shiny-border {
+    0% {
+        border-color: rgba(34, 139, 34, 0.5); /* Darker green */
+        box-shadow: 0 0 10px rgba(34, 139, 34, 0.5);
+    }
+    50% {
+        border-color: rgba(34, 139, 34, 0.9); /* Brighter dark green */
+        box-shadow: 0 0 15px rgba(34, 139, 34, 0.9);
+    }
+    100% {
+        border-color: rgba(34, 139, 34, 0.5); /* Darker green */
+        box-shadow: 0 0 10px rgba(34, 139, 34, 0.5);
+    }
+}
+
+.popup-content h2 {
+        margin-top: 0;
+        color: #136715;
+        font-size: 25px;
+        font-family: 'Times New Roman', Times, serif; 
+    }
+
+    .popup-content p {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #ffffff;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); 
+        font-weight: bold; 
+        line-height: 1.5; 
+        font-family: 'Times New Roman', Times, serif; 
+    }
+
+    .popup-content strong {
+        font-size: 20px; 
+        color: #ffffff; 
+    }

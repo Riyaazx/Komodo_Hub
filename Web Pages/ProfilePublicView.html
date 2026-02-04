@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Profile - Komodo Hub</title>
+    <link rel="stylesheet" href="ProfilePrivateView.css">
+    <script defer src="ProfilePublicView.js"></script>
+    <script src="Main.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="HomePage.html">
+            <!-- Logo -->
+            <img src="Images/komodoLogo.png" alt="Komodo Hub Logo" class="logo">
+        </a>
+        
+        <div class="nav-center">
+            <a href="CommunityLibrary.html"><button>Community Library</button></a>
+            <a href="SchoolLibrary.html"><button>School Library</button></a>
+            <a href="Post.html"><button>Post</button></a>
+            <a href="Games.html"><button>Games</button></a>
+        </div>
+    
+        <button class="login">Profile</button>
+    </div>
+
+    <div class="main-container">
+        <!-- Public Profile Section -->
+        <div class="profile-section">
+            <div class="profile-container">
+                <img id="profile-avatar" src="Images/default.png" alt="Profile Picture">  
+                <div class="profile-info">
+                    <h2 id="profile-name" class="name">Loading...</h2>
+                    <p id="profile-username" class="username">@Loading..</p>
+                    <p id="profile-role" class="role"><strong>Role:</strong> Loading..</p>
+                </div>
+            </div>
+
+            <!-- Contributions Section -->
+            <div class="contributions-container">
+                <h3>Contributions</h3>
+                
+                <p>
+                    <strong>
+                      <img src="Images/icons/scroll.png" alt="Posts Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Posts:
+                    </strong>
+                    <span id="posts">Loading...</span>
+                </p>
+                  
+                <p>
+                    <strong>
+                      <img src="Images/icons/star.png" alt="Points Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Points:
+                    </strong>
+                    <span id="points">Loading...</span>
+                </p>
+                  
+                <p id="membersContribution" style="display: none;">
+                    <strong>
+                      <img src="Images/icons/member.png" alt="Members Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Members Involved:
+                    </strong>
+                    <span id="members">Loading...</span>
+                </p>
+                  
+                <p id="staffContribution" style="display: none;">
+                    <strong>
+                      <img src="Images/icons/school.png" alt="School Staff Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> School Staff Involved:
+                    </strong>
+                    <span id="staff">Loading...</span>
+                </p>
+                  
+                <!-- New Students Involved -->
+                <p id="studentsContribution" style="display: none;">
+                    <strong>
+                      <img src="Images/icons/student.png" alt="Students Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Students Involved:
+                    </strong>
+                    <span id="students">Loading...</span>
+                </p>
+    
+                <p>
+                    <strong>
+                      <img src="Images/icons/rank.png" alt="Rank Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Rank:
+                    </strong>
+                    <span id="rank">Loading...</span>
+                </p>
+                  
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            
+                <p>
+                    <strong>
+                      <img src="Images/icons/rank.png" alt="Next Rank Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Next Rank:
+                    </strong>
+                    <span class="next-rank" id="next-rank">Loading...</span>
+                </p>
+                  
+        </div>
+    </div>
+</body>
+</html>

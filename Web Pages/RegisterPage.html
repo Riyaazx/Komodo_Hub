@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register to Komodo Hub</title>
+    <link rel="stylesheet" href="/Web Pages/LoginRegister.css" type="text/css">
+    <link rel="stylesheet" href="/Web Pages/Popup.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="#" id="home">
+            <img src="/Web Pages/Images/komodoLogo.png" alt="Logo" class="logo">
+        </a>
+    </div>
+    <div class="form-container register-box">
+        <h2 class="form-title">Register to Komodo Hub</h2>
+        <form id="registerForm" action="/register" method="POST"novalidate>
+            <input type="text" name="name" placeholder="Name *" required>
+            <input type="text" name="username" placeholder="Username *" oninput="this.value = this.value.replace(/\s/g, '')" required>
+            <div id="usernameError" class="error-message-username"></div>
+
+            <div class="password-container">
+                <input type="password" id="password" name="password" placeholder="Password *" oninput="this.value = this.value.replace(/\s/g, '')" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('password', this)">
+                    <img src="/Web Pages/Images/Hide_pass.png" alt="Hide Password" class="eye">
+                </button>
+            </div>
+            <div id="passwordError" class="error-message"></div>
+            
+            <div class="password-container">
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password *" oninput="this.value = this.value.replace(/\s/g, '')" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('confirm_password', this)">
+                    <img src="/Web Pages/Images/Hide_pass.png" alt="Hide Password" class="eye">
+                </button>
+            </div>
+            <div id="passwordError2" class="error-message2"></div>
+
+            <div class="dropdown">
+                <select name="user_type" id="dropdown" required>
+                    <option value="" disabled selected hidden>Register as </option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="member">Member</option>
+                </select>
+            </div>
+    
+            <input id="accessCode" name="access_code" type="text" placeholder="Access code" oninput="this.value = this.value.replace(/\D/g, '')" style="display: none;">
+            <div id="codeError" class="error-message-code"></div>
+            <img src="/Web Pages/Images/giphy.gif" alt="Loading animation" class="gif">
+
+            <button id="submit" type="submit" class="submit-button">Register</button>
+
+        </form>
+        <p class="redirect">
+            Already have an account? <a href="#" id="loginLink">Login</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('dropdown').addEventListener('change', function () {
+            let selectedValue = this.value;
+            let accessCodeInput = document.getElementById('accessCode');
+            let button = document.getElementById('submit');
+
+            // Show/hide access code field based on selection
+            if (selectedValue === 'student' || selectedValue === 'teacher') {
+                accessCodeInput.style.display = 'block';
+                accessCodeInput.setAttribute('required', 'true');
+                button.textContent = 'Register';
+            }
+            else if (selectedValue === 'member') {
+                accessCodeInput.style.display = 'none';
+                accessCodeInput.removeAttribute('required');
+                button.textContent = 'Go to Payment Page';
+            }
+            else {
+                accessCodeInput.style.display = 'none';
+                accessCodeInput.removeAttribute('required');
+            }
+        });
+
+        document.querySelector('input[name="username"]').addEventListener('input', function () {
+            let username = this.value.trim(); // Get entered username
+            let dropdown = document.getElementById('dropdown');
+            let accessCodeInput = document.getElementById('accessCode');
+            let dropdownContainer = dropdown.parentElement; // Get the dropdown wrapper div
+
+            // Define the specific username that triggers the hide behavior
+            let specialUsername = "KhairunnisaUjungRayaPrimary"; // Change this to the username you want
+            let specialUsername2 = "AdminUser#404";
+
+            if (username === specialUsername || username === specialUsername2) {
+                dropdownContainer.classList.add('hidden'); // Hide the dropdown
+                dropdown.removeAttribute('required'); // Remove required attribute
+                dropdown.value = ""; // Clear its value
+                accessCodeInput.classList.add('hidden');  // Hide access code input
+                accessCodeInput.removeAttribute('required');
+            } else {
+                dropdownContainer.classList.remove('hidden');
+                dropdown.setAttribute('required', 'true'); // Ensure required is added back
+                accessCodeInput.classList.remove('hidden');
+                accessCodeInput.setAttribute('required', 'true');
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let name = document.querySelector('input[placeholder="Name *"]').value;
+            let username = document.querySelector('input[placeholder="Username *"]').value;
+            let password = document.querySelector('input[placeholder="Password *"]').value;
+            let confirmPassword = document.querySelector('input[placeholder="Confirm password *"]').value;
+            let userType = document.getElementById('dropdown').value;
+            let accessCode = document.getElementById('accessCode').value;
+            
+            let usernameError = document.getElementById('usernameError');
+            let passwordError = document.getElementById('passwordError');
+            let passwordError2 = document.getElementById('passwordError2');
+            let codeError = document.getElementById('codeError');
+
+            // Clear previous error messages
+            usernameError.textContent = "";
+            passwordError.textContent = "";
+            passwordError2.textContent = "";
+            codeError.textContent = "";
+
+            // Set userType to "admin" if username is "adminUser"
+            if (username === "KhairunnisaUjungRayaPrimary") {
+                userType = "principal";
+            }
+            if (username === "AdminUser#404") {
+                userType = "admin";
+            }
+
+            let hasError = false;
+
+            if (username.length < 3) {
+                usernameError.textContent = "❗Username must be at least 3 characters long.";
+                hasError = true;
+            }
+
+            if (password.length < 8) {
+                passwordError.textContent = "❗Password must be at least 8 characters long.";
+                hasError = true;
+            }
+
+            if (password !== confirmPassword) {
+                passwordError2.textContent = "❗Passwords do not match.";
+                hasError = true;
+            }
+
+            // Prepare user data for registration
+            let formData = new FormData();
+            formData.append('name', name);
+            formData.append('username', username);
+            formData.append('password', password);
+            formData.append('user_type', userType);
+            formData.append('accessCode', accessCode);
+
+            // If student or teacher, check access code
+            if (userType === 'student' || userType === 'teacher') {
+                if (!accessCode.trim()) {  // Fix: Ensure input is not just spaces
+                    codeError.textContent = "❗Access code is required.";
+                    hasError = true;
+                } else {
+                    let isValid = await validateAccessCode(userType, accessCode);
+                    if (!isValid) {
+                        codeError.textContent = "❗Invalid access code.";
+                        hasError = true;
+                    }
+                }
+            }
+
+            // Stop execution if any error is found
+            if (hasError) {
+                setTimeout(() => {
+                    usernameError.textContent = "";
+                    passwordError.textContent = "";
+                    passwordError2.textContent = "";
+                    codeError.textContent = "";
+                }, 2501);
+                return;
+            }
+
+            // If user is a member, store the data in localStorage and redirect to payment page
+            if (userType === 'member') {
+                localStorage.setItem('registrationData', JSON.stringify({
+                    name: name,
+                    username: username,
+                    password: password,
+                    userType: userType
+                }));
+                
+                // Redirect to payment page
+                window.location.replace('/Web Pages/PaymentPage.html');
+            }
+
+            // Handle student or teacher registration immediately
+            if (userType != 'member'){
+                fetch('/register', {
+                method: 'POST',
+                body: formData
+                })
+                .then(async response => {
+                    let result = await response.json(); // Parse JSON correctly
+                    if (response.ok) {
+                        localStorage.setItem("registeredName", name);
+                        setTimeout(() => {
+                            window.location.replace('/Web Pages/LoginPage.html');
+                        }, 1700); // Redirect to login page
+                    } else {
+                        showPopup("" + result.error, "error", 2200);
+                    }
+
+                })
+                .catch(error => {
+                    showPopup("An error occurred while logging in.", "error", 2200);
+                });
+            }
+        });
+
+        async function validateAccessCode(userType, accessCode) {
+            try {
+                const response = await fetch('/validate-access', {  // Change port if necessary
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userType, accessCode })
+                });
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    return false;
+                }
+                return true;  // Proceed with registration
+            } catch (error) {
+                console.error('Error:', error);
+                return false;
+            }
+        }
+
+        // Function to toggle password visibility
+        function togglePassword(fieldId, button) {
+            let passwordField = document.getElementById(fieldId);
+            let img = button.querySelector('img');
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                img.src = "/Web Pages/Images/Show_pass.png"; 
+                img.alt = "Show Password";
+            } else {
+                passwordField.type = "password";
+                img.src = "/Web Pages/Images/Hide_pass.png";
+                img.alt = "Hide Password";
+            }
+        }
+
+        function showPopup(message, type, time, errorField = null) {
+            let popup = document.getElementById("popupMessage");
+            
+            if (!popup) {
+                popup = document.createElement("div");
+                popup.id = "popupMessage";
+                popup.classList.add("popup");
+                document.querySelector('.form-container').appendChild(popup); // Attach below form
+            }
+
+            popup.textContent = message;
+            popup.className = `popup ${type}`;
+            popup.style.display = "block";
+
+            if (errorField) {
+                errorField.classList.add("input-error");
+                errorField.focus();
+            }
+
+            setTimeout(() => {
+                popup.style.opacity = "1";
+            }, 10);
+
+            setTimeout(() => {
+                popup.style.opacity = "0";
+                setTimeout(() => popup.style.display = "none", 400);
+                if (errorField) {
+                    errorField.classList.remove("input-error");
+                }
+            }, time);
+        }
+        document.getElementById("loginLink").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default navigation
+            window.location.replace("/Web Pages/LoginPage.html"); // Redirect without allowing back navigation
+        });
+        document.getElementById("home").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default navigation
+            window.location.replace("/Web Pages/HomePage.html"); // Redirect without allowing back navigation
+        });
+    </script>
+</body>
+</html>
+
+

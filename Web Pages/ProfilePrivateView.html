@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komodo Hub Profile</title>
+    <link rel="stylesheet" href="ProfilePrivateView.css">
+    <script defer src="ProfilePrivateView.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="HomePage.html">
+            <!-- Logo -->
+            <img src="Images/komodoLogo.png" alt="Komodo Hub Logo" class="logo">
+        </a>
+        <div class="nav-center"></div>
+ 
+        <a href="HomePage.html">
+           <!-- Logout Button -->
+           <button class="login" onclick="logout(event)">Logout</button>
+        </a>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-container">
+        <!-- Left Side -->
+        <div class="profile-section">
+            <!-- Profile Section -->
+            <div class="profile-container">
+                <img id="profile-avatar" src="Images/default.png" alt="Profile Picture">  
+                <div class="profile-info">
+                    <h2 class="name" id="display-name">Loading...</h2> 
+                    <p class="username" id="display-username">@loading</p>
+                    <p class="role"><strong>Role:</strong> <span id="display-role">Loading...</span></p>
+                </div>
+            </div>      
+
+            <!-- Avatar Selection & Password Change -->
+            <div class="settings-container">
+                <p class="section-title">Choose Avatar</p><!-- Avatar Selection -->
+                <div class="avatar-options">
+                    <img class="avatar" src="Images/default.png" data-avatar="default" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/cool.png" data-avatar="cool" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/lion.png" data-avatar="lion" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/rabbit.png" data-avatar="rabbit" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/panda.png" data-avatar="panda" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/monkey.png" data-avatar="monkey" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/dog.png" data-avatar="dog" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/fox.png" data-avatar="fox" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/frog-.png" data-avatar="frog" onclick="setAvatar(this)">
+                </div>
+                <!-- Save Avatar Button -->
+                <button onclick="saveAvatar()" class="btn green">Save Avatar</button>
+                
+                <h3>Change Password</h3>
+                <div class="password-container">
+                    <input type="password" id="newPassword" placeholder="Enter new password" oninput="validatePassword()">
+                    <img src="Images/icons/hiddenpassword.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword()" style="width:20px; height:20px; vertical-align:middle;">
+                </div>
+                  
+                <p id="passwordError" class="error-message"></p>
+                <button onclick="changePassword()" class="btn green">Update Password</button>
+                </div>
+        </div>
+
+        <!-- Right Side: Contributions -->
+        <div class="contributions-container">
+            <h3>My Contributions</h3>
+            
+            <p>
+                <strong>
+                  <img src="Images/icons/scroll.png" alt="Posts Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Posts:
+                </strong>
+                <span id="posts">Loading...</span>
+            </p>
+              
+            <p>
+                <strong>
+                  <img src="Images/icons/star.png" alt="Points Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Points:
+                </strong>
+                <span id="points">Loading...</span>
+            </p>
+              
+            <p id="membersContribution" style="display: none;">
+                <strong>
+                  <img src="Images/icons/member.png" alt="Members Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Members Involved:
+                </strong>
+                <span id="members">Loading...</span>
+            </p>
+              
+            <p id="staffContribution" style="display: none;">
+                <strong>
+                  <img src="Images/icons/school.png" alt="School Staff Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> School Staff Involved:
+                </strong>
+                <span id="staff">Loading...</span>
+            </p>
+              
+            <!-- New Students Involved -->
+            <p id="studentsContribution" style="display: none;">
+                <strong>
+                  <img src="Images/icons/student.png" alt="Students Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Students Involved:
+                </strong>
+                <span id="students">Loading...</span>
+            </p>
+
+            <p>
+                <strong>
+                  <img src="Images/icons/rank.png" alt="Rank Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Rank:
+                </strong>
+                <span id="rank">Loading...</span>
+            </p>
+              
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        
+            <p>
+                <strong>
+                  <img src="Images/icons/rank.png" alt="Next Rank Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Next Rank:
+                </strong>
+                <span class="next-rank" id="next-rank">Loading...</span>
+            </p>
+              
+            <div id="access-code-section" class="access-code-section">
+                <h3>Change Student's Access Code</h3>
+                <div class="access-code-container">
+                    <input type="text" id="newStudentAccessCode" placeholder="Enter new student access code" oninput="validateStudentAccessCode()">
+                </div>
+                <p id="studentAccessCodeMessage" class="error-message"></p>
+                <button onclick="changeStudentAccessCode()" class="btn green">Update Student Access Code</button>
+            </div>
+           
+            <button onclick="deleteAccount()" class="delete-button">
+                <img src="Images/icons/delete.png" alt="Delete Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Delete Account
+            </button>
+              
+        </div>                        
+    </div>
+</body>
+</html>
+

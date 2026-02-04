@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komodo Hub School Profile</title>
+    <link rel="stylesheet" href="SchoolPage.css">
+    <script defer src="SchoolPage.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="HomePage.html">
+            <!-- Logo -->
+            <img src="Images/komodoLogo.png" alt="Komodo Hub Logo" class="logo">
+        </a>
+        
+        <div class="nav-center">
+            <a href="CommunityLibrary.html"><button>Community Library</button></a>
+            <a href="SchoolLibrary.html"><button>School Library</button></a>
+            <a href="Post.html"><button>Post</button></a>
+            <a href="Games.html"><button>Games</button></a>
+        </div>
+    
+        <a href="HomePage.html">
+           <!-- Logout Button -->
+           <button class="login" onclick="logout(event)">Logout</button>
+        </a>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-container" style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Profile Container on Top -->
+        <div class="profile-section">
+            <div class="profile-container">
+                <img id="profile-avatar" src="Images/schoolprof.jpg" alt="Profile Picture">  
+                <div class="profile-info">
+                    <h2 class="name" id="display-name">Loading...</h2> 
+                    <p class="username" id="display-username">@loading</p>
+                    <p class="role"><strong>Role:</strong> <span id="display-role">Loading...</span></p>
+                    <p class="about"><strong>About Us:</strong> Located in the heart of Ujung Kulon, Ujung Raya Primary School is dedicated to nurturing young minds while protecting our natural heritage. Surrounded by the Javan Rhinoceros Conservation Area, we inspire students to learn, explore, and lead in environmental conservation. 
+                        Through our partnership with Komodo Hub, we integrate conservation education into our curriculum, empowering students to actively participate in protecting endangered species. We are committed to fostering responsible, compassionate, and environmentally conscious leaders of tomorrow.
+                        Join us in learning and leading for a better future.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Settings and Contributions Side by Side -->
+        <div class="bottom-section" style="display: flex; justify-content: space-between; gap: 20px;">    
+            <!-- Settings Container -->
+            <div class="settings-container" style="width: 48%;">
+                <p class="section-title">Choose Avatar</p>
+                <div class="avatar-options">
+                    <img class="avatar" src="Images/default.png" data-avatar="default" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/schoolprof.jpg" data-avatar="school" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/cool.png" data-avatar="cool" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/lion.png" data-avatar="lion" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/rabbit.png" data-avatar="rabbit" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/panda.png" data-avatar="panda" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/monkey.png" data-avatar="monkey" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/dog.png" data-avatar="dog" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/fox.png" data-avatar="fox" onclick="setAvatar(this)">
+                    <img class="avatar" src="Images/frog-.png" data-avatar="frog" onclick="setAvatar(this)">
+                </div>
+                <button onclick="saveAvatar()" class="btn green">Save Avatar</button>
+                
+                <h3>Change Password</h3>
+                <div class="password-container">
+                    <input type="password" id="newPassword" placeholder="Enter new password" oninput="validatePassword()">
+                    <!-- Updated toggle icon -->
+                    <img src="Images/icons/hiddenpassword.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword()" style="width:20px; height:20px; vertical-align:middle;">
+                </div>
+                <p id="passwordError" class="error-message"></p>
+                <button onclick="changePassword()" class="btn green">Update Password</button>
+
+                <h3>Change Teacher's Access Code</h3>
+                <div class="password-container">
+                    <input type="text" id="newTeacherAccessCode" placeholder="Enter new teacher access code" oninput="validateTeacherAccessCode()">
+                </div>
+                <p id="teacherAccessCodeMessage" class="error-message"></p>
+                <button onclick="changeTeacherAccessCode()" class="btn green">Update Teacher Access Code</button>
+
+            </div>
+
+            <!-- Contributions Container -->
+            <div class="contributions-container" style="width: 48%;">
+                <h3>School Contributions</h3>
+                
+                <p>
+                    <strong>
+                        <img src="Images/icons/scroll.png" alt="Posts Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Posts:
+                    </strong>
+                    <span id="posts">Loading...</span>
+                </p>
+                <p>
+                    <strong>
+                        <img src="Images/icons/star.png" alt="Points Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Points:
+                    </strong>
+                    <span id="points">Loading...</span>
+                </p>
+                <p>
+                    <strong>
+                        <img src="Images/icons/teacher_school.png" alt="Teacher Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Teachers Involved:
+                    </strong>
+                    <span id="teachers">Loading...</span>
+                </p>
+                <p>
+                    <strong>
+                        <img src="Images/icons/student_school.png" alt="Students Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Students Involved:
+                    </strong>
+                    <span id="students">Loading...</span>
+                </p>
+                <p>
+                    <strong>
+                        <img src="Images/icons/rank.png" alt="Rank Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Rank:
+                    </strong>
+                    <span id="rank">Loading...</span>
+                </p>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+
+                <p>
+                    <strong>
+                        <img src="Images/icons/rank.png" alt="Next Rank Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Next Rank:
+                    </strong>
+                    <span class="next-rank" id="next-rank">Loading...</span>
+                </p>
+                <button onclick="deleteAccount()" class="delete-button">
+                    <img src="Images/icons/delete.png" alt="Delete Icon" class="emoji-icon" style="width:20px; height:20px; vertical-align:middle;"> Delete Account
+                </button>
+            </div>                        
+        </div>
+    </div>
+
+    <!-- Vertical Frames -->
+    <div class="vertical-frame">
+        <img src="Images/left_school.png" alt="Fun Animals and Children" class="vertical-img">
+    </div>
+    <div class="right-edge-frame">
+        <img src="Images/right_school.png" alt="Right Edge Image" class="right-edge-img">
+    </div>
+    
+</body>
+</html>

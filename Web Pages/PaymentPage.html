@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komodo Hub Payment</title>
+    <link rel="stylesheet" href="/Web Pages/PaymentPage.css">
+    
+</head>
+<body>
+
+    <div class="container">
+        <div class="payment-box">
+            <h1>Payment</h1>
+            <p>Please enter complete information for payment</p>
+            
+            <form id="payment-form">
+                <label>Cardholder name</label>
+                <input type="text" id="cardholder-name" placeholder="Full name on card" required>
+                <div id="nameError" class="error-message"></div>
+
+                <label>Card Information</label>
+                <input type="text" id="card-number" class="card-number-input" placeholder="_ _ _ _  _ _ _ _  _ _ _ _  _ _ _ _" maxlength="19" required>
+                <div id="cardNumberError" class="error-message"></div>
+
+                <div class="card-details">
+                    <div>
+                        <input type="text" id="CVV" placeholder="CVV" required maxlength="3">
+                    </div>
+                    <div>
+                        <input type="text" id="expiry-date" placeholder="MM / YY" maxlength="7" required>
+                        <div id="expiryError" class="error-message"></div>
+                    </div>
+                </div>
+
+                <button type="button" onclick="completePayment()">Complete Payment</button>
+            </form>
+        </div>
+
+        <div class="ticket-background">
+            <div class="total-amount-box">
+                <p>Amount to be paid: £<span id="finalAmount">9.60</span></p>
+            </div>
+        </div>
+
+        <div class="ticket-background2">
+        </div>
+
+        <div class="payment-summary">
+            <h3>Payment Summary</h3>
+            <p><strong>Order Number</strong><span id="order-number"></span></p>
+            <p><strong>Order Amount (£)</strong> £<span id="totalAmount">8.00</span></p>
+            <p><strong>VAT</strong> <span id="vatAmount">20%</span></p>
+            <p><strong>VAT Amount</strong> £<span id="totalAmount">1.60</span></p>
+        </div>
+    </div>
+
+    <script>
+
+        function generateOrderNumber() {
+            return Math.floor(10000000 + Math.random() * 90000000);
+        }
+    
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("order-number").innerText = generateOrderNumber();
+        });
+
+        document.getElementById('expiry-date').addEventListener('input', function(event) {
+            let value = event.target.value.replace(/\D/g, ''); 
+
+            
+            if (event.inputType === 'deleteContentBackward') {
+                return;
+            }
+
+            if (value.length >= 2) {
+                let mm = value.substring(0, 2);
+                let yy = value.substring(2, 4);
+
+        
+                if (parseInt(mm) > 12) {
+                    mm = '0' + mm[0]; 
+                    yy = value.substring(1, 3); 
+                }
+
+                value = mm + ' / ' + yy; 
+            }
+
+            event.target.value = value;
+        });
+
+        document.getElementById('CVV').addEventListener('input', function(event) {
+            let value = event.target.value;
+    
+            
+            if (event.inputType === 'deleteContentBackward') {
+                return; 
+            }
+    
+            value = value.replace(/\D/g, '');
+            event.target.value = value;
+        });
+    
+        document.getElementById('card-number').addEventListener('input', function(event) {
+            let value = event.target.value;
+        
+            if (event.inputType === 'deleteContentBackward') {
+                return; 
+            }
+    
+            value = value.replace(/\D/g, '');
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+            event.target.value = value;
+        });
+    
+        document.getElementById('cardholder-name').addEventListener('input', function(event) {
+            let value = event.target.value;
+    
+            
+            value = value.replace(/[^a-zA-Z\s]/g, '');
+    
+            value = value.replace(/\b\w/g, function(char) {
+                return char.toUpperCase();
+            });
+    
+            event.target.value = value;
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("order-number").innerText = generateOrderNumber();
+            document.getElementById("cardholder-name").addEventListener("input", capitalizeName);
+        });
+
+        function completePayment() {
+            let formFields = document.querySelectorAll("#payment-form input");
+            let cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+            let cvv = document.getElementById('CVV').value;
+            let expiryDate = document.getElementById('expiry-date').value;
+            let nameInput = document.getElementById('cardholder-name');
+            let nameValue = nameInput.value.trim();
+            let nameError = document.getElementById('nameError');
+            let allValid = true;
+        
+            // Regex ensures full name (first and surname)
+            const fullNameRegex = /^[A-Za-z]{2,}\s+[A-Za-z]{2,}$/;
+        
+            // Cardholder name validation
+            if (!fullNameRegex.test(nameValue)) {
+                nameError.textContent = "❗Please enter your full name (first and surname)";
+                nameInput.classList.add('invalid');
+                allValid = false;
+            } else {
+                nameError.textContent = "";
+                nameInput.classList.remove('invalid');
+            }
+
+            // Check each input for empty values
+            formFields.forEach(function(input) {
+                if (input.value.trim() === "") {
+                    allValid = false;
+        
+    
+                }
+            });
+
+            // Validate card number
+            let cardNumberInput = document.getElementById('card-number');
+            let cardNumberError = document.getElementById('cardNumberError');
+
+            if (cardNumber.length !== 16) {
+                cardNumberInput.classList.add('invalid');
+                cardNumberError.textContent = "❗Card number has to be 16 digits";
+                allValid = false;
+            } else {
+                cardNumberInput.classList.remove('invalid');
+                cardNumberError.textContent = "";
+            }
+
+            // Validate CVV
+            let cvvInput = document.getElementById('CVV');
+            if (cvv.length !== 3) {
+                cvvInput.classList.add('invalid');
+                allValid = false;
+            } else {
+                cvvInput.classList.remove('invalid');
+            }
+
+            // Validate expiry date
+            let expiryDateInput = document.getElementById('expiry-date');
+            let expiryDateValue = expiryDateInput.value.trim();
+            let expiryDatePattern = /^(0[1-9]|1[0-2]) \/ \d{2}$/;
+            let expiryError = document.getElementById('expiryError');
+
+            if (!expiryDatePattern.test(expiryDate)) {
+                expiryDateInput.classList.add('invalid');
+                allValid = false;
+
+            } else {
+                let year = parseInt('20' + expiryDateValue.split(' / ')[1]);
+
+                if (year < 2025) {
+                    expiryDateInput.classList.add('invalid');
+                    expiryError.textContent = "❗Expiry dates can't be in the past";
+                    allValid = false;
+                } else {
+                    expiryDateInput.classList.remove('invalid');
+                    expiryError.textContent = "";
+                }
+            }
+
+            if (allValid) {
+
+                // Get user data from localStorage
+                const registrationData = JSON.parse(localStorage.getItem('registrationData'));
+
+                // Send the registration data to the backend for insertion after payment
+                fetch('/complete_payment_registration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: registrationData.username,
+                        name: registrationData.name,
+                        password: registrationData.password
+                    })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message) {
+                        showPaymentSuccessPopup();
+                        localStorage.removeItem('registrationData');  // Remove registration data after successful payment
+                        setTimeout(() => {
+                            window.location.replace('/Web Pages/LoginPage.html');
+                        }, 1700);  // Redirect to login page
+                    } else {
+                        showPopup("" + result.error, "error", 2200);
+                    }
+                })
+                .catch(error => {
+                    showPopup("There was an error completing your registration.", "error", 2200);
+                });
+            } else {
+                showPopup("Please fill out all fields.", "error", 1500);
+            }
+        }
+
+        // Function for payment success
+        function showPaymentSuccessPopup() {
+            let popup = document.createElement("div");
+            popup.id = "paymentPopup";
+            popup.className = "payment-popup";
+            popup.innerHTML = `
+                <div class="popup-content">
+                    <h2> 💳✔ Payment Successful!</h2>
+                    <p>Thank you for subscribing to <strong>KomodoHub!</strong> </p>
+                </div>
+            `;
+
+            document.body.appendChild(popup);
+
+            setTimeout(() => {
+                popup.style.opacity = "0";
+                setTimeout(() => popup.remove(), 500);
+            }, 19000000000);
+        }
+        
+
+        function capitalizeName(event) {
+            let value = event.target.value;
+            value = value.replace(/[^a-zA-Z\s]/g, '').toLowerCase();
+            const words = value.split(" ");
+            if (words[0]) words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+            if (words[1]) words[1] = words[1].charAt(0).toUpperCase() + words[1].slice(1);
+            event.target.value = words.join(" ");
+        }
+
+        function showPopup(message, type, time, errorField = null) {
+            let popup = document.getElementById("popupMessage");
+            
+            if (!popup) {
+                popup = document.createElement("div");
+                popup.id = "popupMessage";
+                popup.classList.add("popup");
+                document.querySelector('.container').appendChild(popup); // Attach below form
+            }
+
+            popup.textContent = message;
+            popup.className = `popup ${type}`;
+            popup.style.display = "block";
+
+            if (errorField) {
+                errorField.classList.add("input-error");
+                errorField.focus();
+            }
+
+            setTimeout(() => {
+                popup.style.opacity = "1";
+            }, 10);
+
+            setTimeout(() => {
+                popup.style.opacity = "0";
+                setTimeout(() => popup.style.display = "none", 300);
+                if (errorField) {
+                    errorField.classList.remove("input-error");
+                }
+            }, time);
+        }
+
+        function adjustBoxHeights() {
+            const paymentBox = document.querySelector(".payment-box");
+            const summaryBox = document.querySelector(".payment-summary");
+            const ticketBox = document.querySelector(".ticket-background");
+            const ticketBox2 = document.querySelector(".ticket-background2");
+        
+            // Get the actual height of the payment box
+            const paymentHeight = paymentBox.offsetHeight;
+        
+            // Fine-tune height by slightly reducing it (adjust the subtraction value as needed)
+            const adjustedHeight = paymentHeight - 20; 
+        
+            // Apply the same height to other boxes, ensuring they do not grow excessively
+            summaryBox.style.height = adjustedHeight + "px";
+            ticketBox.style.height = adjustedHeight + "px";
+            ticketBox2.style.height = (adjustedHeight - 250) + "px"; // Ensure ticketBox2 does not shrink too much
+        }
+        
+        // Run the function once when the page loads
+        document.addEventListener("DOMContentLoaded", adjustBoxHeights);
+        
+        // Observe changes in the payment-box
+        const observer = new MutationObserver(() => {
+            adjustBoxHeights();
+        });
+        
+        // Start observing the payment-box for any height changes
+        const paymentBox = document.querySelector(".payment-box");
+        observer.observe(paymentBox, { attributes: true, childList: true, subtree: true });
+        
+    </script>
+
+</body>
+</html>
