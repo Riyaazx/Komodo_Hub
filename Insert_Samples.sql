@@ -1,3 +1,8 @@
+-- DEMO DATA ONLY
+-- All usernames, passwords, access codes, school names and posts in this file are fictional.
+-- Do not use these credentials in a production environment.
+
+
 INSERT INTO AccessCode (UserType, Code) VALUES ('student', 12345);
 INSERT INTO AccessCode (UserType, Code) VALUES ('teacher', 54321);
 
